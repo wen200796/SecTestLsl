@@ -1,0 +1,92 @@
+﻿@model IEnumerable<MemberBasicViewModel>
+@* @section ScriptsFirst {
+    @{
+        Html.RenderPartial("~/Views/Shared/_ValidationScriptsPartial.cshtml");
+    }
+} *@
+
+<button data-modal-target="RegisterMemberBackdrop" data-modal-toggle="RegisterMemberBackdrop" class="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">
+   註冊會員
+</button>
+<partial name="_RegisterMemberPartial" model="new MemberBasicViewModel()" />
+
+        <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+            <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                <tr>
+            <th scope="col" class="sticky top-0 px-6 py-3 bg-blue-300">
+                        會員ID
+                    </th>
+            <th scope="col" class="sticky top-0 px-6 py-3 bg-blue-300">
+                        顯示名稱
+                    </th>
+            <th scope="col" class="sticky top-0 px-1 py-3  bg-blue-300 ">
+                        電子信箱
+                    </th>
+            <th scope="col" class="sticky top-0 px-6 py-3  bg-blue-300">
+                        接收優惠資訊
+                    </th>
+            <th scope="col" class="sticky top-0 px-6 py-3  bg-blue-300">
+                        修改
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                   @foreach(MemberBasicViewModel memberBasicVM in Model)
+        {
+                    <tr class="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700  hover:bg-blue-100 dark:hover:bg-text-blue-800">
+                    <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                        @memberBasicVM.MemberId
+                    </th>
+                    <td class="px-6 py-4">
+                        @memberBasicVM.MemberShowName
+                    </td>
+                    <td class="px-1 py-4">
+                        @memberBasicVM.Email
+                    </td>
+                    <td class="px-6 py-4">
+                        @memberBasicVM.GetCampInfo
+                    </td>
+                    <td class="px-6 py-4">
+                        <a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">修改</a>
+                    </td>
+                </tr>
+                }
+            </tbody>
+        </table>
+
+    
+   <div class="modal fade" id="EditMemberBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">修改會員</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div id="toAddEditMemberPartial" class="modal-body">
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    @{
+        await Html.RenderPartialAsync("~/Views/Shared/_ValidationScriptsPartial.cshtml");
+    }
+
+    <script>
+        $(document).on('click', '[data-bs-target="#EditMemberBackdrop"]', function () {
+            var memberId = $(this).attr('id');
+
+            $.ajax({
+                url: '/AdmMember/MemberBasic/Edit/' + memberId,
+                type: 'GET',
+                success: function (data) {
+                    $('#toAddEditMemberPartial').html(data);
+                    $.getScript('@Url.Content("~/js/reValidate.js")');
+                }
+            });
+        });
+    </script> 
+
+}
+
