@@ -47,7 +47,7 @@
                         @memberBasicVM.GetCampInfo
                     </td>
                     <td class="px-6 py-4">
-                        <a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">修改</a>
+                    <a href="#" data-modal-target="RegisterMemberBackdrop" data-modal-toggle="RegisterMemberBackdrop" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">修改</a>
                     </td>
                 </tr>
                 }
@@ -84,6 +84,36 @@
                     $('#toAddEditMemberPartial').html(data);
                     $.getScript('@Url.Content("~/js/reValidate.js")');
                 }
+            });
+        });
+        document.addEventListener('DOMContentLoaded', function () {
+            // 在這裡放置當文檔準備好後要執行的 JavaScript 代碼
+            // 這相當於 $(document).ready() 的功能
+            var elements = document.querySelectorAll('[data-modal-hide="RegisterMemberBackdrop"]');
+            elements.forEach(function (element) {
+                element.addEventListener('click', function () {
+                    // 先查找最接近的父元素是 <form> 的元素
+                    var formElement = element.closest('form');
+
+                    // 如果找不到父元素是 <form> 的元素，則查找後面遇到的第一個鄰居元素是 <form>
+                    if (!formElement) {
+                        formElement = element.nextElementSibling;
+
+                        while (formElement || formElement.tagName !== 'FORM') {
+                            formElement = formElement.nextElementSibling;
+                            console.log('1');
+                        }
+                    }
+
+                    // 檢查是否找到了 <form> 元素
+                    if (formElement) {
+                        // 取得 <form> 元素的ID
+                        var formId = formElement.id;
+                        console.log('Form ID:', formId);
+                    } else {
+                        console.log('找不到父表單元素且後面遇到的第一個鄰居元素不是 <form>');
+                    }
+                });
             });
         });
     </script> 
