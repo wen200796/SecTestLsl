@@ -92,27 +92,22 @@
             var elements = document.querySelectorAll('[data-modal-hide="RegisterMemberBackdrop"]');
             elements.forEach(function (element) {
                 element.addEventListener('click', function () {
-                    // 先查找最接近的父元素是 <form> 的元素
-                    var formElement = element.closest('form');
 
-                    // 如果找不到父元素是 <form> 的元素，則查找後面遇到的第一個鄰居元素是 <form>
-                    if (!formElement) {
-                        formElement = element.nextElementSibling;
+                    // 因為前面在data-modal-hide="RegisterMemberBackdrop" 元素裡面手動再多加了formid這個屬性 
+                    const formId = element.getAttribute('formid');
 
-                        while (formElement || formElement.tagName !== 'FORM') {
-                            formElement = formElement.nextElementSibling;
-                            console.log('1');
-                        }
-                    }
+                    // 找到該 formid 存放值的表單
+                    const form = document.getElementById(formId);
+                    //清空表單
+                    form.reset();
+                    // 使用 document.querySelectorAll 選擇所有帶有 data-valmsg-for 屬性的 span 元素
+                    var spanElements = document.querySelectorAll('span[data-valmsg-for]');
 
-                    // 檢查是否找到了 <form> 元素
-                    if (formElement) {
-                        // 取得 <form> 元素的ID
-                        var formId = formElement.id;
-                        console.log('Form ID:', formId);
-                    } else {
-                        console.log('找不到父表單元素且後面遇到的第一個鄰居元素不是 <form>');
-                    }
+                    // 遍歷每個找到的元素
+                    spanElements.forEach(function (spanElement) {
+                        // 清空每個元素的 innerHTML
+                        spanElement.innerHTML = '';
+                    });
                 });
             });
         });
