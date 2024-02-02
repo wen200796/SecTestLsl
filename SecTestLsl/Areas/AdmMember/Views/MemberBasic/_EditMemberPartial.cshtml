@@ -1,35 +1,41 @@
 ﻿@model MemberBasicViewModel
-                <form asp-area="AdmMember" asp-controller="MemberBasic" asp-action="Edit" asp-route-id="@Model.MemberId">
-                    <div>
-                        <label asp-for="MemberShowName">@Html.DisplayNameFor(m => m.MemberShowName)</label>
-                        <input asp-for="MemberShowName" />
-                        <br />
-                        <span asp-validation-for="MemberShowName" class="text-danger"></span>
+            <form id="EditForm" asp-area="AdmMember" asp-controller="MemberBasic" asp-action="Register" class="max-w-sm mx-auto">
+                <div class="mt-5 mb-5">
+                    <label asp-for ="MemberShowName" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                        @Html.DisplayNameFor(m => m.MemberShowName)
+                    </label>
+                    <input asp-for="MemberShowName" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light" placeholder="你的名字" required>
+                    <span asp-validation-for="MemberShowName" class="mt-2 text-sm text-red-600 dark:text-red-500"></span>
+                </div>
+                <div class="mt-5 mb-5">
+                    <label asp-for="Email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                        @Html.DisplayNameFor(m => m.Email)
+                    </label>
+                    <input asp-for="Email" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light" placeholder="你的信箱" required>
+                    <span asp-validation-for="Email" class="mt-2 text-sm text-red-600 dark:text-red-500"></span>
+                </div>
+                                <div class="mt-5 mb-5">
+                    <label asp-for="GetCampInfo" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                        @Html.DisplayNameFor(m => m.GetCampInfo)
+                    </label>
+                    <fieldset>
+                  @*       
+                    @foreach (var item in @ViewBag.YesNo)
+                    {
+                        <div class="flex items-center mb-4">
+                                <input asp-for="GetCampInfo" type="radio" value="@item.Value" class="w-4 h-4 border-gray-300 focus:ring-2 focus:ring-blue-300 dark:focus:ring-blue-600 dark:focus:bg-blue-600 dark:bg-gray-700 dark:border-gray-600">
+                                <label asp-for="GetCampInfo" class="block ms-2  text-sm font-medium text-gray-900 dark:text-gray-300">
+                                @item.Text
+                            </label>
+                        </div>
+                    } *@
+                    </fieldset>
+                    <span asp-validation-for="GetCampInfo" class="mt-2 text-sm text-red-600 dark:text-red-500"></span>
+                </div>
+                    <div class="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600">
+                    @* <button type="submit" data-modal-hide="RegisterMemberBackdrop" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">註冊</button> *@
+                    <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">送出</button>
+                    <button data-modal-hide="RegisterMemberBackdrop" formid="EditForm" type="button" class="ms-3 text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">Decline</button>
                     </div>
-                    <div>
-                        <label asp-for="Email">@Html.DisplayNameFor(m => m.Email)</label>
-                        <input asp-for="Email" />
-                        <br />
-                        <span asp-validation-for="Email" class="text-danger"></span>
-                    </div>
-    <div>
-        <label>@Html.DisplayNameFor(m => m.GetCampInfo)</label>
-        <div class="form-check">
-
-            <label class="form-check-label">
-                <input asp-for="GetCampInfo" class="form-check-input" type="radio"  value="是">
-                是
-            </label>
-        </div>
-        <div class="form-check">
-            <label class="form-check-label">
-                <input asp-for="GetCampInfo" class="form-check-input" type="radio" value="否">
-                否
-            </label>
-        </div>
-    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消 Close</button>
-                        <button type="submit" class="btn btn-primary">修改 Understood</button>
-                    </div>
-                </form>
+            </form>
+    

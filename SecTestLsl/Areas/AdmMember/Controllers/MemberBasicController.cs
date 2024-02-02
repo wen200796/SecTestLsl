@@ -22,6 +22,20 @@ namespace SecTestLsl.Areas.AdmMember.Controllers
         // GET: AdmMember/MemberBasic
         public IActionResult Index()
         {
+            List<SelectListItem> GetCampInfoList = new List<SelectListItem>();
+
+            GetCampInfoList.Add(new SelectListItem()
+            {
+                Text = "是",
+                Value = "true",
+            });
+
+            GetCampInfoList.Add(new SelectListItem()
+            {
+                Text = "否",
+                Value = "false",
+            });
+            ViewBag.YesNo = GetCampInfoList;
            IEnumerable<MemberBasicViewModel> mbVMCOllection = MemberBasicViewModel.GetCollection(_context);
             return View(mbVMCOllection);
         }
@@ -66,24 +80,24 @@ namespace SecTestLsl.Areas.AdmMember.Controllers
             return Content("這段如果有放_ValidationScriptsPartial 就不易被觸發");
         }
 
-        //// GET: AdmMember/MemberBasic/Edit/5
-        //public async Task<IActionResult> Edit(int? id)
-        //{
-        //    if (id == null || _context.tMember == null)
-        //    {
-        //        return NotFound();
-        //    }
+        // GET: AdmMember/MemberBasic/Edit/5
+        public async Task<IActionResult> Edit(int? id)
+        {
+            if (id == null || _context.tMembers == null)
+            {
+                return NotFound();
+            }
 
-        //    var dbMember = await _context.tMember.FindAsync(id);
-        //    if (dbMember == null)
-        //    {
-        //        return NotFound();
-        //    }
-        //    var memberBVm = new MemberBasicViewModel { MemberId = id };
-        //    memberBVm.MemberShowName = dbMember.fShowName;
-        //    memberBVm.Email = dbMember.fEmail;
-        //    return PartialView("~/Areas/AdmMember/Views/MemberBasic/_EditMemberPartial.cshtml", memberBVm);
-        //}
+            var dbMember = await _context.tMembers.FindAsync(id);
+            if (dbMember == null)
+            {
+                return NotFound();
+            }
+            var memberBVm = new MemberBasicViewModel { MemberId = id };
+            memberBVm.MemberShowName = dbMember.fShowName;
+            memberBVm.Email = dbMember.fEmail;
+            return PartialView("~/Areas/AdmMember/Views/MemberBasic/_EditMemberPartial.cshtml", memberBVm);
+        }
 
         // POST: AdmMember/MemberBasic/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.

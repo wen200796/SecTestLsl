@@ -32,14 +32,24 @@
                     <label asp-for="Email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
                         @Html.DisplayNameFor(m => m.Email)
                     </label>
-                    <input asp-for="Email" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light" placeholder="你的名字" required>
+                    <input asp-for="Email" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light" placeholder="你的信箱" required>
                     <span asp-validation-for="Email" class="mt-2 text-sm text-red-600 dark:text-red-500"></span>
                 </div>
                                 <div class="mt-5 mb-5">
                     <label asp-for="GetCampInfo" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
                         @Html.DisplayNameFor(m => m.GetCampInfo)
                     </label>
-                    <input asp-for="GetCampInfo" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light" placeholder="你的名字" required>
+                    <fieldset>
+                    @foreach (var item in @ViewBag.YesNo)
+                    {
+                        <div class="flex items-center mb-4">
+                                <input asp-for="GetCampInfo" type="radio" value="@item.Value" class="w-4 h-4 border-gray-300 focus:ring-2 focus:ring-blue-300 dark:focus:ring-blue-600 dark:focus:bg-blue-600 dark:bg-gray-700 dark:border-gray-600">
+                                <label asp-for="GetCampInfo" class="block ms-2  text-sm font-medium text-gray-900 dark:text-gray-300">
+                                @item.Text
+                            </label>
+                        </div>
+                    }
+                    </fieldset>
                     <span asp-validation-for="GetCampInfo" class="mt-2 text-sm text-red-600 dark:text-red-500"></span>
                 </div>
                     <div class="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600">
