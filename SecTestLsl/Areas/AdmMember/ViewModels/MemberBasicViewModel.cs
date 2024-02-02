@@ -1,4 +1,5 @@
-﻿using SecTestLsl.Models;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using SecTestLsl.Models;
 using System.ComponentModel.DataAnnotations;
 using System.Runtime.InteropServices;
 
@@ -20,6 +21,7 @@ namespace SecTestLsl.Areas.AdmMember.ViewModels
         [Required]
         [Display(Name = "接收優惠資訊")]
         public string GetCampInfo { get; set; }
+        //public List<SelectListItem>? GetCampInfoList { get; set; }
         public static List<MemberBasicViewModel> GetCollection(LifeShareLearnContext context)
         {
             var dbMemberCollection = context.tMembers;

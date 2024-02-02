@@ -1,9 +1,4 @@
 ﻿@model IEnumerable<MemberBasicViewModel>
-@* @section ScriptsFirst {
-    @{
-        Html.RenderPartial("~/Views/Shared/_ValidationScriptsPartial.cshtml");
-    }
-} *@
 
 <button data-modal-target="RegisterMemberBackdrop" data-modal-toggle="RegisterMemberBackdrop" class="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">
    註冊會員
@@ -14,7 +9,7 @@
             <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                 <tr>
             <th scope="col" class="sticky top-0 px-6 py-3 bg-blue-300">
-                        會員ID
+                       @Html.
                     </th>
             <th scope="col" class="sticky top-0 px-6 py-3 bg-blue-300">
                         顯示名稱
@@ -22,7 +17,7 @@
             <th scope="col" class="sticky top-0 px-1 py-3  bg-blue-300 ">
                         電子信箱
                     </th>
-            <th scope="col" class="sticky top-0 px-6 py-3  bg-blue-300">
+            <th  scope="col" class="sticky top-0 px-6 py-3  bg-blue-300">
                         接收優惠資訊
                     </th>
             <th scope="col" class="sticky top-0 px-6 py-3  bg-blue-300">
@@ -47,26 +42,12 @@
                         @memberBasicVM.GetCampInfo
                     </td>
                     <td class="px-6 py-4">
-                    <a id="@memberBasicVM.MemberId"  data-modal-target="EditMemberBackdrop" data-modal-toggle="EditMemberBackdrop" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">修改</a>
+                    <a memberId="@memberBasicVM.MemberId"  data-modal-target="EditMemberBackdrop" data-modal-toggle="EditMemberBackdrop" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">修改</a>
                     </td>
                 </tr>
                 }
             </tbody>
         </table>
-
-    
-@*    <div class="modal fade" id="EditMemberBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="staticBackdropLabel">修改會員</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div id="toAddEditMemberPartial" class="modal-body">
-            </div>
-        </div>
-    </div>
-</div> *@
 
 <!-- Main modal -->
 <div id="EditMemberBackdrop" data-modal-backdrop="static" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
@@ -84,10 +65,11 @@
                     </svg>
                     <span class="sr-only">Close modal</span>
                 </button>
-            </div id="toAddEditMemberPartial">
-            <!-- Modal body -->
-
-
+            </div>
+            <div id="toAddEditMemberPartial">
+                 <!-- Modal body -->
+            </div>
+           
         </div>
     </div>
 </div>
@@ -95,43 +77,98 @@
 
 @section Scripts{
     @{
+        //載入jQuery用戶端驗證腳本們
         await Html.RenderPartialAsync("~/Views/Shared/_ValidationScriptsPartial.cshtml");
     }
 
     <script>
-        $(document).on('click', '[data-modal-target="EditMemberBackdrop"]', function () {
-            var memberId = $(this).attr('id');
-            console.log(memberId);
-
-            $.ajax({
-                url: '/AdmMember/MemberBasic/Edit/' + memberId,
-                type: 'GET',
-                success: function (data) {
-                    $('#toAddEditMemberPartial').html(data);
-                    $.getScript('@Url.Content("~/js/reValidate.js")');
-                }
-            });
-        });
         document.addEventListener('DOMContentLoaded', function () {
             // 在這裡放置當文檔準備好後要執行的 JavaScript 代碼
             // 這相當於 $(document).ready() 的功能
+
+        //jQuery取得要顯示在修改彈跳視窗的html
+        // $(document).on('click', '[data-modal-target="EditMemberBackdrop"]', function () {
+        //     var memberId = $(this).attr('memberId');
+        //     console.log(memberId);
+
+        //     $.ajax({
+        //         url: '/AdmMember/MemberBasic/Edit/' + memberId,
+        //         type: 'GET',
+        //         success: function (data) {
+        //             $('#toAddEditMemberPartial').html(data);
+        //             $.getScript('@Url.Content("~/js/reValidate.js")');
+        //         }
+        //     });
+        // });
+
+
+        //querySelectorAll選所有到啟動修改彈跳視窗的<a>或<button>元素
+        var elements = document.querySelectorAll('[data-modal-target="EditMemberBackdrop"]');
+
+        //幫他們的click事件加上方法
+        elements.forEach(function (element) {
+            element.addEventListener('click', async (event) => {
+                //記得加try catch 
+                try {
+                    //針對點到的元素，取得預先埋藏的屬性id
+                    const memberId = event.target.getAttribute('memberId');
+                    //fetch呼叫要回傳局部檢視 的 控制器動作 並且要用id指定傳回模型對象
+                    const response = await fetch(`@Url.Content("~/AdmMember/MemberBasic/Edit/")?id=${memberId}`, {
+                        method: "GET"
+                    });
+                    //攔截錯誤狀態代號
+                    if (!response.ok) {
+                        throw new Error(`${response.status}`);
+                    }
+                    //取得控制器動作回傳的 html
+                    const data = await response.text();
+                    //把html加到指定的彈跳視窗容器內
+                    document.getElementById("toAddEditMemberPartial").innerHTML = data
+                    //下面是一個呼叫腳本的方法，如果用jQuery寫只要寫 $.getScript('指定的url');
+                    function loadScript(url, callback) {
+                        var script = document.createElement('script');
+                        script.type = 'text/javascript';
+                        script.src = url;
+                        script.onload = callback(script.src);
+                        document.head.appendChild(script);
+                    }
+                    //呼叫寫好的腳本，並在主控台通知
+                    //這個寫好的腳本是為了重新綁定因為ajax呼叫而失效的jQuery用戶端驗證
+                    loadScript('@Url.Content("~/js/reValidate.js")', function (url) {
+                        console.log(`${url} 腳本載入成功！`);
+                    });
+                } catch (error) {
+                    //把簡短錯誤訊息呈現在畫面，程式不中斷
+                    document.getElementById("toAddEditMemberPartial").innerHTML = `<h2> 錯誤： ${error.message} 請稍後再試</h2>`
+                }
+            });
+        });
+
+
+
+            //querySelectorAll選所有要關閉 指定 彈跳視窗的<a>或<button>元素 
+            //這裡指定負責註冊(新增)的彈跳視窗，因為負責修改的彈跳視窗內容<form>會隨著切換直接被覆蓋掉
+            //但負責新增的彈跳視窗，因為一直存在於畫面只是被隱藏，要幫她關閉時清空<form>和驗證錯誤的<span>
             var elements = document.querySelectorAll('[data-modal-hide="RegisterMemberBackdrop"]');
+
+            //幫他們的click事件加上方法
             elements.forEach(function (element) {
                 element.addEventListener('click', function () {
-
                     // 因為前面在data-modal-hide="RegisterMemberBackdrop" 元素裡面手動再多加了formid這個屬性 
                     const formId = element.getAttribute('formid');
 
-                    // 找到該 formid 存放值的表單
+                    // 找到該 id = formid 的<form>
                     const form = document.getElementById(formId);
-                    //清空表單
+                    //清空表單input
                     form.reset();
+
                     // 使用 document.querySelectorAll 選擇所有帶有 data-valmsg-for 屬性的 span 元素
+                    //這個屬性是有使用asp-validation-for 搭配 jQuery用戶端驗證 會出現的
                     var spanElements = document.querySelectorAll('span[data-valmsg-for]');
 
-                    // 遍歷每個找到的元素
+                    // 清空每個元素的 innerHTML
+                    //本來裡面會放生成的錯誤訊息
                     spanElements.forEach(function (spanElement) {
-                        // 清空每個元素的 innerHTML
                         spanElement.innerHTML = '';
                     });
                 });

@@ -23,7 +23,6 @@ namespace SecTestLsl.Areas.AdmMember.Controllers
         public IActionResult Index()
         {
             List<SelectListItem> GetCampInfoList = new List<SelectListItem>();
-
             GetCampInfoList.Add(new SelectListItem()
             {
                 Text = "是",
@@ -93,9 +92,27 @@ namespace SecTestLsl.Areas.AdmMember.Controllers
             {
                 return NotFound();
             }
+            List<SelectListItem> GetCampInfoList = new List<SelectListItem>();
+
+            GetCampInfoList.Add(new SelectListItem()
+            {
+                Text = "是",
+                Value ="是",
+            });
+
+            GetCampInfoList.Add(new SelectListItem()
+            {
+                Text = "否",
+                Value = "否",
+            });
+            //int y = 0;
+            //int x =0;
+            //int k = y / x;
+            ViewBag.YesNo = GetCampInfoList;
             var memberBVm = new MemberBasicViewModel { MemberId = id };
             memberBVm.MemberShowName = dbMember.fShowName;
             memberBVm.Email = dbMember.fEmail;
+            memberBVm.GetCampInfo = dbMember.fGetCampaignInfo == true ? "是" : "否";
             return PartialView("~/Areas/AdmMember/Views/MemberBasic/_EditMemberPartial.cshtml", memberBVm);
         }
 
